@@ -4,7 +4,7 @@
 // #define DEEP_SLEEP
 
 // GPIO2 (D4 pin on ESP-12E Development Board).
-#define DEBUG_OUT Serial1
+#define DEBUG_OUT Serial
 
 // PMS_READ_INTERVAL (4:30 min) and PMS_READ_DELAY (30 sec) CAN'T BE EQUAL! Values are also used to detect sensor state.
 static const uint32_t PMS_READ_INTERVAL = 270000;
@@ -13,12 +13,12 @@ static const uint32_t PMS_READ_DELAY = 30000;
 // Default sensor state.
 uint32_t timerInterval = PMS_READ_DELAY;
 
-PMS pms(Serial);
+PMS pms(Serial1);
 
 void setup()
 {
   // GPIO1, GPIO3 (TX/RX pin on ESP-12E Development Board)
-  Serial.begin(PMS::BAUD_RATE); 
+  Serial1.begin(PMS::BAUD_RATE); 
   DEBUG_OUT.begin(9600);
 
   // Switch to passive mode.
@@ -73,7 +73,7 @@ void readData()
   PMS::DATA data;
 
   // Clear buffer (removes potentially old data) before read. Some data could have been also sent before switching to passive mode.
-  while (Serial.available()) { Serial.read(); }
+  while (Serial1.available()) { Serial.read(); }
 
   DEBUG_OUT.println("Send read request...");
   pms.requestRead();
